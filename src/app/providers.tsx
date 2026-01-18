@@ -1,4 +1,4 @@
-'use client'
+use client
 
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -12,10 +12,19 @@ import { baseSepolia, mainnet } from 'wagmi/chains'
 let config: any = null
 
 function getConfig() {
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+  
+  if (!projectId) {
+    throw new Error(
+      'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID environment variable is required. ' +
+      'Please set it in your .env.local file.'
+    )
+  }
+
   if (!config) {
     config = getDefaultConfig({
       appName: 'ERC-8092 Demo',
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'ffff890acd298e25d2bc1580ff98b810',
+      projectId,
       // mainnet included for ENS resolution
       chains: [baseSepolia, mainnet],
       ssr: true,
